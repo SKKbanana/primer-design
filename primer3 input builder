@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="离线生成 Primer3 Boulder-IO 输入文件，支持 PCR、qPCR、克隆和巢式 PCR。">
+<title>Primer3 输入文件生成器</title>
+<style>:root{--green:#186650;--light:#eaf4ee;--ink:#1a3029;--muted:#6b7d75;--line:#dfe7e1;--paper:#f5f7f3;--mono:Consolas,"SFMono-Regular",monospace}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.6}.topbar{height:76px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 max(4vw,24px);background:#fff}.brand{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:650}.brandmark{background:var(--green);color:#fff;padding:6px 9px;border-radius:9px;font:700 17px var(--mono)}.offline{font-size:12px;color:var(--muted);display:flex;gap:7px;align-items:center}.offline i,.dot{display:inline-block;background:#58a47c;height:6px;width:6px;border-radius:50%}main{max-width:1380px;margin:auto;padding:42px 38px 22px}.intro{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:34px}.eyebrow{font:600 11px var(--mono);letter-spacing:2px;color:var(--green);margin:0 0 12px}h1{font-size:34px;letter-spacing:-.9px;line-height:1.35;margin:0 0 12px;font-weight:650}.intro>div>p:last-child{color:var(--muted);font-size:15px;margin:0}.workspace{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}form,aside{min-width:0}.card{border:1px solid var(--line);border-radius:16px;background:#fff;padding:23px;margin-bottom:18px}.section-title{display:flex;align-items:center;gap:10px;margin-bottom:21px}.step{font:600 12px var(--mono);color:var(--green);padding:5px 7px;background:var(--light);border-radius:5px}h2{font-size:17px;margin:0;font-weight:650}h3{font-size:14px;margin:0 0 12px;font-weight:650}.minor{margin-left:auto;color:#7b8b82;font-size:12px}.optional,.unit{font-size:11px;color:var(--muted);font-weight:400;margin-left:5px}.row,.triple{display:grid;gap:16px;margin-bottom:15px}.row{grid-template-columns:1fr 1fr}.triple{grid-template-columns:repeat(3,1fr)}label{display:block;font-size:13px;font-weight:550}input:not([type=checkbox]),select,textarea{display:block;width:100%;border:1px solid #d5ded7;border-radius:8px;background:#fdfefd;color:#213a2f;padding:11px 12px;font:400 14px/1.4 inherit;margin-top:7px;outline:none;transition:border-color .15s,box-shadow .15s}input:not([type=checkbox]),select{min-height:43px;font-family:inherit;font-size:13px}select{padding-right:24px}textarea{font-size:13px;resize:vertical;line-height:1.65}input:focus,select:focus,textarea:focus{border-color:#35806a;box-shadow:0 0 0 3px #18665014}.sequence{font-family:var(--mono)!important;word-break:break-all}input::placeholder,textarea::placeholder{color:#8a9990;font-weight:400}.hint{display:block;font-weight:400;font-size:12px;line-height:1.7;color:var(--muted);margin:7px 0 0}.info{font-size:12px;line-height:1.8;background:#f1f6f2;border-radius:7px;padding:10px 12px;margin:0 0 18px;color:#4a6557}.sequence-meta{display:flex;justify-content:space-between;gap:12px;color:#819087;font-size:11px;margin-top:7px}.sequence-meta span:last-child{white-space:nowrap}.target-heading{display:flex;justify-content:space-between;align-items:center;margin:25px 0 16px;gap:12px}.target-heading h3{margin:0}.segmented{display:flex;background:#f1f4f0;border:1px solid #e7ece6;padding:3px;border-radius:8px}.segmented button{border:none;background:none;padding:5px 11px;font-size:12px;color:#6d7f73;border-radius:5px}.segmented button[aria-pressed=true]{background:#fff;color:#265c43;box-shadow:0 1px 4px #20302614}.target-actions{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px}.checkbox{display:flex;align-items:center;font-size:12px;font-weight:400;gap:7px}.checkbox input{accent-color:var(--green)}button{font:550 13px/1.4 inherit;font-family:inherit;cursor:pointer;transition:background .15s,transform .15s}button:active{transform:translateY(1px)}button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid #87b9a7;outline-offset:3px}button:disabled{opacity:.5;cursor:default}.primary,.secondary,.small-button{padding:12px 16px;border-radius:9px;border:1px solid transparent;font-size:13px}.primary{background:var(--green);color:white}.primary:hover:not(:disabled){background:#124d3d}.secondary{background:#fff;border-color:#cfdbd1;color:#315441}.secondary:hover{background:#f1f6ef}.small-button{padding:7px 10px;background:var(--light);color:var(--green)}.text-button{background:none;border:none;color:var(--green);font-size:12px;cursor:pointer;font-weight:500;padding:0}.section-title .text-button{margin-left:auto}.generate{width:100%;padding:16px 20px;display:flex;justify-content:center;gap:24px;align-items:center;font-size:15px}.inset{margin-top:20px;background:#f5f8f3;padding:16px;border:1px solid #e0e9dc;border-radius:9px}.inset>.hint{margin-bottom:12px}.spaced{margin-top:20px}details{border-top:1px solid var(--line);margin-top:18px;padding-top:15px}summary{font-size:12px;font-weight:550;cursor:pointer;line-height:1.7;color:#3b6350}summary span{float:right}.advanced-body{padding-top:22px}.subhead{display:flex;justify-content:space-between;gap:12px;margin-bottom:14px}.subhead h3{margin:0}.output-card{border-radius:17px;background:#fff;border:1px solid #d7e2d9;overflow:hidden;margin-bottom:18px;box-shadow:0 8px 30px #28463106}.output-heading{padding:23px 23px 19px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.output-heading .eyebrow{margin-bottom:6px}.status{border:1px solid #dfe7df;border-radius:20px;padding:4px 9px;font-size:11px;color:#7f8c83}.status.ready{background:var(--light);color:var(--green);border-color:#c9e2d0}#emptyOutput{text-align:center;padding:95px 20px 100px;color:#829187}#emptyOutput h3{font-size:15px;color:#536b5c}#emptyOutput p{font-size:12px;line-height:1.9}.empty-icon{font:30px var(--mono);color:#91ae9c;margin-bottom:28px}.output-footer{padding:14px 22px;color:#829187;background:#fafcf9;border-top:1px solid #e8eee7;font-size:10px;display:flex;align-items:center;gap:7px}.result-stats{display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:12px;padding:21px 23px 16px}.result-stats span{font-size:11px;color:var(--muted);display:block;margin-bottom:4px}.result-stats strong{font-size:16px;font-weight:550;font-family:var(--mono)}.region-track{height:7px;background:#e9eee8;border-radius:9px;position:relative;margin:0 23px}.region-track div{position:absolute;top:0;height:100%;min-width:2px;background:#60a17d;border-radius:9px}.output-note{font-size:11px;color:var(--muted);margin:9px 23px 18px}#output{background:#142c23;color:#d8e9da;border-radius:0;border:none;resize:vertical;padding:20px 23px;font:11px/1.9 var(--mono);height:445px;min-height:200px;white-space:pre;overflow:auto;margin:0;tab-size:2}#output:focus{box-shadow:inset 0 0 0 2px #75b293}.output-buttons{display:flex;gap:10px;padding:18px 23px 0}.output-buttons button:first-child{flex:1}.output-buttons button:last-child{min-width:100px}#copyStatus{min-height:17px;margin-bottom:13px;margin-top:7px}.guide h3{font-size:14px}.guide p{font-size:12px;color:var(--muted);line-height:1.8;margin:10px 0 17px}.guide select{font-size:12px}.guide pre{white-space:pre-wrap;word-break:break-all;background:#f0f4ee;border-radius:7px;padding:13px;font:11px/1.9 var(--mono);color:#3b5a43;margin:12px 0}.guide details p:last-child{margin-bottom:0}.guide code,footer code{font-size:11px;overflow-wrap:anywhere}.warnings{background:#fffcf0;border-color:#e9dfb9}.warnings h3{color:#7b6928}.warnings ul{padding-left:18px;font-size:12px;color:#82713f;margin:0}.warnings li+li{margin-top:7px}#errorBox{background:#fff2ef;border:1px solid #e8bfb4;color:#943a29;border-radius:9px;margin:0 0 16px;padding:14px 17px;font-size:13px}footer{font-size:11px;color:#7f8c81;text-align:center;padding:35px 0 0}footer a{color:#547c62;text-decoration:none}footer p{margin:8px 0 0;line-height:1.8}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}[hidden]{display:none!important}.mobile-only{display:none}@media(min-width:1200px){aside{position:sticky;top:22px}}@media(max-width:950px){main{padding:30px 22px}.workspace{gap:18px;grid-template-columns:1fr 1fr}.card{padding:18px}h1{font-size:29px}.intro .secondary{white-space:nowrap}.section-title{gap:7px}.section-title h2{font-size:16px}.row,.triple{gap:10px}.sequence-meta span:last-child{display:none}}@media(max-width:760px){.workspace{grid-template-columns:1fr}.topbar{height:64px;padding:0 18px}.brand{font-size:14px;gap:8px}.offline{font-size:10px}.intro{align-items:flex-start;margin-bottom:25px;gap:12px}.intro .secondary{font-size:11px;padding:9px}h1{font-size:28px}.mobile-only{display:block}main{padding:29px 16px}.intro>div>p:last-child{font-size:12px}.eyebrow{font-size:9px;letter-spacing:1.5px}.card{padding:18px;border-radius:12px}#emptyOutput{padding:60px 20px}.row{gap:12px}.triple{gap:8px}input:not([type=checkbox]),select,textarea{font-size:16px}.hint{font-size:11px}.subhead .text-button{font-size:11px}.unit{font-size:10px}.section-title .text-button{font-size:11px}.target-heading{gap:5px}.segmented button{font-size:11px;padding:5px 9px}.result-stats strong{font-size:14px}label{font-size:12px}.output-footer{font-size:9px}}@media print{.topbar,.intro,form,.output-buttons,.guide,footer{display:none}.workspace{display:block}main{padding:0}.output-card{border:0;box-shadow:none}#output{height:auto;color:#000;background:#fff}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="brand"><span class="brandmark" aria-hidden="true">P3</span><span>Primer3 输入文件生成器</span></div><span class="offline"><i></i> 本地离线运行</span></header>
+<main>
+<section class="intro"><div><p class="eyebrow">DNA → BOULDER-IO</p><h1>把序列变成<br class="mobile-only">可运行的设计指令。</h1><p>选择用途，指定目标，导出 Primer3 所需的 <code>.txt</code> 文件。</p></div><button class="secondary" id="exampleBtn" type="button">载入演示序列 <span aria-hidden="true">↗</span></button></section>
+<div class="workspace">
+<form id="form" novalidate>
+<section class="card">
+<div class="section-title"><span class="step">01</span><h2>选择设计需求</h2><span class="minor">必填</span></div>
+<div class="row"><label>引物类型<select id="profile"><option value="pcr">普通 PCR</option><option value="qpcr">SYBR qPCR</option><option value="cloning">克隆 / 指定片段扩增</option><option value="outer">巢式 PCR · 外引物</option><option value="inner">巢式 PCR · 内引物</option></select></label><label>序列名称 <span class="optional">选填</span><input id="id" placeholder="例如 pax2a_cDNA" maxlength="80" autocomplete="off"><span class="hint">用于文件命名；使用英文、数字或下划线。</span></label></div>
+<p id="profileHint" class="info"></p>
+<label>扩增方式<select id="mode"><option value="flank">两侧包围目标 — 引物落在目标两侧</option><option value="within">区域内设计 — 产物位于目标区域内部</option><option value="exact">精确扩增 — 产物两端与指定片段一致</option></select></label>
+<p id="modeHint" class="hint"></p>
+</section>
+<section class="card">
+<div class="section-title"><span class="step">02</span><h2>输入 DNA 与目标</h2><button id="importBtn" type="button" class="text-button">导入序列文件</button><input id="fileInput" type="file" accept=".fa,.fasta,.fna,.txt,.seq,.dna,.rna" hidden></div>
+<label for="template">DNA 全长序列 <span class="optional">5′ → 3′</span></label>
+<textarea id="template" class="sequence" rows="7" placeholder="粘贴 DNA 序列或单条 FASTA 记录&#10;>sequence_name&#10;ATG…" spellcheck="false" autocapitalize="off"></textarea>
+<div class="sequence-meta"><span id="seqStats">支持 A/C/G/T/N · 自动整理空白、行号和大小写</span><span>线性模板</span></div>
+<div class="target-heading"><h3>目标扩增区域</h3><div class="segmented" role="group" aria-label="目标输入方式"><button type="button" id="posTab" aria-pressed="true">bp 位置</button><button type="button" id="seqTab" aria-pressed="false">目标序列</button></div></div>
+<div id="positionFields"><div class="row"><label>起点 <span class="unit">bp</span><input id="start" type="number" min="1" step="1" placeholder="例如 401"></label><label>终点 <span class="unit">bp</span><input id="end" type="number" min="1" step="1" placeholder="例如 650"></label></div><p class="hint">从第 1 个碱基开始编号，包含起点和终点。例如 101–200 bp 为 100 bp。</p></div>
+<div id="sequenceFields" hidden><label for="targetSequence">目标序列 <span class="optional">5′ → 3′</span></label><textarea id="targetSequence" class="sequence" rows="3" placeholder="输入需要定位的目标片段…" spellcheck="false"></textarea><div class="target-actions"><label class="checkbox"><input id="searchReverse" type="checkbox">同时查找反向互补序列</label><button type="button" id="locateBtn" class="small-button">定位目标</button></div><div id="matchWrap" hidden><label>选择匹配位置<select id="matchKey"></select></label></div><p id="matchHint" class="hint">按序列完全匹配；多处匹配时需选择位置。</p></div>
+<div id="nestedFields" class="inset" hidden><h3>已选外引物的结合区</h3><p class="hint">填写同一份全长模板上的 1-based 坐标。反向引物也按较小坐标 → 较大坐标填写。</p><div class="row"><label>正向结合区起点<input id="outerLeftStart" type="number" min="1" placeholder="101"></label><label>正向结合区终点<input id="outerLeftEnd" type="number" min="1" placeholder="122"></label></div><div class="row"><label>反向结合区起点<input id="outerRightStart" type="number" min="1" placeholder="979"></label><label>反向结合区终点<input id="outerRightEnd" type="number" min="1" placeholder="1000"></label></div><label>与外引物结合区最小间隔 <span class="unit">bp</span><input id="nestedGap" type="number" value="0" min="0" max="10000"></label><p class="hint">先设计并选定外引物，再设计内引物。内引物结合区不会与外引物重叠。</p></div>
+<div id="tailFields" class="inset" hidden><h3>5′ 附加序列 <span class="optional">选填</span></h3><div class="row"><label>正向引物附加序列<input id="leftTail" class="sequence" placeholder="如保护碱基 + 酶切位点" spellcheck="false"></label><label>反向引物附加序列<input id="rightTail" class="sequence" placeholder="按引物自身 5′ → 3′ 填写" spellcheck="false"></label></div><p class="hint">不自动生成酶切位点或同源臂；反向附加序列也直接按订购引物的 5′ → 3′ 输入。需 Primer3 2.6.1+。</p></div>
+</section>
+<section class="card">
+<div class="section-title"><span class="step">03</span><h2>确认设计参数</h2><span class="minor">已预设</span></div>
+<div class="row"><label>产物最短长度 <span class="unit">bp</span><input id="productMin" type="number" min="1" placeholder="留空：自动"></label><label>产物最长长度 <span class="unit">bp</span><input id="productMax" type="number" min="1" placeholder="留空：自动"></label></div><p class="hint">精确扩增时采用指定片段的固定长度。长度不包含 5′ 附加序列。</p>
+<details id="advanced"><summary>调整引物长度、Tm、GC 与反应条件 <span>＋</span></summary><div class="advanced-body"><div class="subhead"><h3>引物筛选阈值</h3><button id="resetParamsBtn" type="button" class="text-button">恢复当前类型预设</button></div><div class="triple"><label>最短长度 <span class="unit">nt</span><input id="minSize" type="number"></label><label>理想长度 <span class="unit">nt</span><input id="optSize" type="number"></label><label>最长长度 <span class="unit">nt</span><input id="maxSize" type="number"></label></div><div class="triple"><label>最低 Tm <span class="unit">°C</span><input id="minTm" type="number" step="0.1"></label><label>理想 Tm <span class="unit">°C</span><input id="optTm" type="number" step="0.1"></label><label>最高 Tm <span class="unit">°C</span><input id="maxTm" type="number" step="0.1"></label></div><div class="triple"><label>最低 GC <span class="unit">%</span><input id="minGc" type="number" step="0.1"></label><label>最高 GC <span class="unit">%</span><input id="maxGc" type="number" step="0.1"></label><label>最大 Tm 差 <span class="unit">°C</span><input id="diffTm" type="number" step="0.1"></label></div><div class="row"><label>最大连续同碱基数<input id="polyX" type="number"></label><label>返回引物对数量<input id="numReturn" type="number" value="5" min="1" max="100"></label></div>
+<h3 class="spaced">Tm 计算条件</h3><div class="row"><label>单价盐 <span class="unit">mM</span><input id="mono" type="number" value="50" step="0.1"></label><label>Mg²⁺ <span class="unit">mM</span><input id="div" type="number" value="1.5" step="0.1"></label></div><div class="row"><label>dNTP 总浓度 <span class="unit">mM</span><input id="dntp" type="number" value="0.6" step="0.1"></label><label>退火寡核苷酸浓度参数 <span class="unit">nM</span><input id="dnaConc" type="number" value="50" step="1"></label></div><p class="hint">dNTP 为四种核苷酸浓度之和。寡核苷酸参数用于 Tm 模型，不是 cDNA 模板浓度，也不直接等同于加样终浓度。</p>
+<label>Primer3 热力学参数目录 <span class="optional">选填</span><input id="thermoPath" placeholder="例如 D:/primer3/src/primer3_config/" spellcheck="false"></label><p class="hint">填写运行 Primer3 的电脑上的目录，不加引号。留空时由 Primer3 寻找默认目录。</p><p class="info">这些数值是可修改的设计起点，不是所有实验通用的最优条件。预设启用寡核苷酸热力学检查，不进行全基因组特异性检索。</p></div></details>
+</section>
+<div id="errorBox" role="alert" tabindex="-1" hidden></div>
+<button id="generateBtn" class="primary generate" type="submit">生成 Primer3 指令 <span aria-hidden="true">→</span></button>
+</form>
+<aside>
+<section class="output-card"><div class="output-heading"><div><p class="eyebrow">OUTPUT</p><h2>指令预览</h2></div><span id="outputStatus" class="status">待生成</span></div>
+<div id="emptyOutput"><div class="empty-icon" aria-hidden="true">[ &nbsp; ]</div><h3>你的输入文件将在这里生成</h3><p>完成左侧输入，或先载入演示序列。<br>所有序列处理均在当前浏览器内完成。</p></div>
+<div id="resultPanel" hidden><div class="result-stats"><div><span>模板全长</span><strong id="outLength"></strong></div><div><span>GC · 排除 N</span><strong id="outGc"></strong></div><div><span>产物长度</span><strong id="outProduct"></strong></div></div><div class="region-track" aria-label="目标区域示意"><div id="targetBar"></div></div><p id="outTarget" class="output-note"></p><label for="output" class="sr-only">Primer3 指令文本</label><textarea id="output" readonly spellcheck="false" wrap="off"></textarea><div class="output-buttons"><button id="downloadBtn" type="button" class="primary" disabled>下载 .txt 文件</button><button id="copyBtn" type="button" class="secondary" disabled>复制指令</button></div><p id="copyStatus" class="output-note" aria-live="polite"></p></div>
+<div class="output-footer"><span class="dot"></span> Boulder-IO 格式 · UTF-8 无 BOM · 记录以 = 结束</div></section>
+<section id="warningsCard" class="card warnings" hidden><h3>本次设计提示</h3><ul id="warnings"></ul></section>
+<section class="card guide"><h3>下载后，交给 Primer3 运行</h3><p>将输入文件放到 Primer3 可执行文件所在目录，在该目录打开终端。</p><label>终端类型<select id="terminal"><option value="bash">Git Bash / Linux / macOS</option><option value="cmd">Windows CMD</option><option value="powershell">Windows PowerShell</option></select></label><pre id="command">./primer3_core --strict_tags --output=sequence_1_result.txt sequence_1_primer3_input.txt</pre><p>若提示找不到热力学参数文件，在高级参数里填写 <code>primer3_config</code> 目录后重新导出。</p><details><summary>如何理解坐标与结果？</summary><p>界面采用从 1 开始的闭区间；指令固定使用从 0 开始的坐标，并自动换算。输出 <code>PRIMER_RIGHT_0=p,L</code> 对应模板上的结合区为 <code>p−L+2</code> 至 <code>p+1</code>（1-based）。</p><p>本程序生成输入文件。候选引物序列、Tm 与评分由 Primer3 计算；没有候选时请查看 <code>PRIMER_*_EXPLAIN</code> 和 <code>PRIMER_ERROR</code>。</p><p>qPCR 预设不会自动识别外显子、排除基因组 DNA 或区分旁系同源基因。需要另外核查特异性，并进行实验验证。</p></details></section>
+</aside></div>
+<footer>v1.0.0 · 面向 Primer3 2.6.1+ · <a href="https://primer3.org/manual.html" target="_blank" rel="noopener noreferrer">Primer3 官方参数说明 ↗</a><p>此程序不上传序列、不执行 Primer3；当前输入在刷新或关闭页面后清除。仅支持单条线性 DNA 模板和成对引物设计。</p></footer>
+</main>
+<script>/* Primer3 Input Builder v1.0.0 — standalone, dependency-free generator. */
+(function (root) {
+  'use strict';
+  const PROFILES = Object.freeze({
+    pcr: {name:'普通 PCR', mode:'flank', minSize:18, optSize:20, maxSize:27, minTm:57, optTm:60, maxTm:63, minGc:35, maxGc:65, diffTm:3, polyX:4, product:[100,1500]},
+    qpcr: {name:'SYBR qPCR', mode:'within', minSize:18, optSize:20, maxSize:25, minTm:59, optTm:60, maxTm:61, minGc:40, maxGc:60, diffTm:1, polyX:4, product:[80,200]},
+    cloning: {name:'克隆 / 指定片段扩增', mode:'exact', minSize:18, optSize:22, maxSize:30, minTm:57, optTm:60, maxTm:65, minGc:35, maxGc:65, diffTm:3, polyX:5, product:[100,3000]},
+    outer: {name:'巢式 PCR · 外引物', mode:'flank', minSize:18, optSize:22, maxSize:27, minTm:58, optTm:60, maxTm:63, minGc:35, maxGc:65, diffTm:2, polyX:4, product:[400,2000]},
+    inner: {name:'巢式 PCR · 内引物', mode:'flank', minSize:18, optSize:22, maxSize:27, minTm:58, optTm:60, maxTm:63, minGc:35, maxGc:65, diffTm:2, polyX:4, product:[100,1000]}
+  });
+  const MODES = {flank:'两侧包围目标',within:'在目标区域内设计',exact:'精确扩增指定片段'};
+  class InputError extends Error {
+    constructor(message, field='', matches=[]) { super(message); this.name='InputError'; this.field=field; this.matches=matches; }
+  }
+  function fail(message,field) { throw new InputError(message,field); }
+  function normalize(raw, label='DNA 全长序列', allowEmpty=false) {
+    let lines=String(raw??'').replace(/^\uFEFF/,'').trim().split(/\r?\n/);
+    const headers=lines.filter(l=>l.trim().startsWith('>'));
+    if(headers.length>1) fail(label+'包含多条 FASTA 记录。请每次只输入一条序列。','template');
+    if(headers.length && !lines[0].trim().startsWith('>')) fail(label+'的 FASTA 标题必须在第一行。','template');
+    if(headers.length) lines=lines.slice(1);
+    const dna=lines.join('').replace(/[\s0-9]/g,'').toUpperCase();
+    if(!dna && !allowEmpty) fail('请填写'+label+'。','template');
+    if(dna.length>500000) fail(label+'超过本程序单次 500,000 bp 的限制。','template');
+    const bad=[...new Set(dna.replace(/[ACGTN]/g,''))];
+    if(bad.length) fail(label+'含不支持的字符：'+bad.slice(0,10).join('、')+'。仅接受 A/C/G/T/N；RNA 的 U、简并碱基及缺口需先确认并处理。','template');
+    return dna;
+  }
+  function revcomp(dna) { const c={A:'T',T:'A',C:'G',G:'C',N:'N'}; return [...dna].reverse().map(b=>c[b]).join(''); }
+  function findMatches(template,target,both=false) {
+    const patterns=[{dna:target,strand:'+'}];
+    if(both && revcomp(target)!==target) patterns.push({dna:revcomp(target),strand:'−'});
+    const matches=[];
+    for(const p of patterns) {
+      let at=template.indexOf(p.dna);
+      while(at!==-1) {
+        matches.push({start:at+1,end:at+target.length,strand:p.strand,key:(at+1)+':'+p.strand});
+        if(matches.length>2000) fail('目标序列匹配过多，请改用明确的 bp 起止位置。','targetSequence');
+        at=template.indexOf(p.dna,at+1);
+      }
+    }
+    return matches.sort((a,b)=>a.start-b.start || a.strand.localeCompare(b.strand));
+  }
+  function number(value,label,min,max,integer=false) {
+    if(value==null || String(value).trim()==='') fail('请填写'+label+'。');
+    const n=Number(value);
+    if(!Number.isFinite(n) || (integer&&!Number.isInteger(n)) || n<min || n>max)
+      fail(label+'必须是 '+min+'–'+max+' 之间的'+(integer?'整数':'数值')+'。');
+    return n;
+  }
+  function resolveTarget(template, cfg) {
+    if(cfg.targetMode==='sequence') {
+      const target=normalize(cfg.targetSequence,'目标序列');
+      if(target.includes('N')) fail('目标序列含 N，无法进行确定的序列定位。请改用 bp 位置。','targetSequence');
+      const matches=findMatches(template,target,!!cfg.searchReverse);
+      if(!matches.length) fail('未找到完全匹配的目标序列。请检查模板、序列方向，或改用 bp 位置。','targetSequence');
+      if(matches.length===1) return {...matches[0],length:target.length,matches};
+      const selected=matches.find(m=>m.key===cfg.matchKey);
+      if(!selected) throw new InputError('目标序列有 '+matches.length+' 个匹配位置，请选择需要扩增的那一处。','matchKey',matches);
+      return {...selected,length:target.length,matches};
+    }
+    if(cfg.targetMode!=='positions') fail('请选择目标序列或 bp 位置输入方式。');
+    const start=number(cfg.start,'目标起点',1,template.length,true);
+    const end=number(cfg.end,'目标终点',1,template.length,true);
+    if(end<start) fail('目标终点不能小于起点。坐标均按模板正向从小到大填写。','end');
+    return {start,end,length:end-start+1,strand:'+',matches:[]};
+  }
+  function generate(cfg) {
+    const profile=PROFILES[cfg.profile];
+    if(!profile) fail('请选择有效的引物类型。','profile');
+    const p={...profile,...cfg.params};
+    const template=normalize(cfg.template);
+    const id=String(cfg.id||'sequence_1').trim();
+    if(!/^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$/.test(id)) fail('序列名称请使用 1–80 位英文字母、数字、下划线、点或短横线，并以字母或数字开头。','id');
+    const target=resolveTarget(template,cfg);
+    const mode=cfg.mode||profile.mode;
+    if(!MODES[mode]) fail('请选择有效的扩增方式。');
+    const specs={minSize:['引物最短长度',12,36,true],optSize:['引物理想长度',12,36,true],maxSize:['引物最长长度',12,36,true],minTm:['最低 Tm',20,90],optTm:['理想 Tm',20,90],maxTm:['最高 Tm',20,90],minGc:['最低 GC%',0,100],maxGc:['最高 GC%',0,100],diffTm:['两引物最大 Tm 差',0,20],polyX:['最大连续同碱基数',2,10,true]};
+    for(const [key,spec] of Object.entries(specs)) p[key]=number(p[key],...spec);
+    if(!(p.minSize<=p.optSize && p.optSize<=p.maxSize)) fail('引物长度应满足：最小 ≤ 理想 ≤ 最大。','minSize');
+    if(!(p.minTm<=p.optTm && p.optTm<=p.maxTm)) fail('Tm 应满足：最低 ≤ 理想 ≤ 最高。','minTm');
+    if(p.minGc>p.maxGc) fail('GC% 下限不能超过上限。','minGc');
+    const count=number(cfg.numReturn??5,'返回引物对数量',1,100,true);
+    const mono=number(cfg.mono??50,'单价盐浓度',0.01,1000);
+    const div=number(cfg.div??1.5,'Mg²⁺ 浓度',0,100);
+    const dntp=number(cfg.dntp??0.6,'dNTP 总浓度',0,100);
+    const dnaConc=number(cfg.dnaConc??50,'退火寡核苷酸浓度参数',0.01,100000);
+    const warnings=[];
+    let domainStart=1,domainEnd=template.length;
+    if(cfg.profile==='inner') {
+      const ls=number(cfg.outerLeftStart,'外引物正向结合区起点',1,template.length,true);
+      const le=number(cfg.outerLeftEnd,'外引物正向结合区终点',ls,template.length,true);
+      const rs=number(cfg.outerRightStart,'外引物反向结合区起点',le+1,template.length,true);
+      const re=number(cfg.outerRightEnd,'外引物反向结合区终点',rs,template.length,true);
+      const gap=number(cfg.nestedGap??0,'内外引物最小间隔',0,10000,true);
+      domainStart=le+gap+1; domainEnd=rs-gap-1;
+      if(domainStart>domainEnd) fail('两条外引物之间没有足够的内侧区域。','outerRightStart');
+      if(target.start<domainStart || target.end>domainEnd) fail('目标必须完全位于允许的内侧区域 '+domainStart+'–'+domainEnd+' bp 内。','start');
+      warnings.push('巢式内引物被限制在 '+domainStart+'–'+domainEnd+' bp；需使用已经选定并核验过的外引物结合区。');
+    }
+    let includedStart=domainStart, includedEnd=domainEnd;
+    if(mode!=='flank') { includedStart=target.start; includedEnd=target.end; }
+    const available=includedEnd-includedStart+1;
+    const theoreticalMin=mode==='flank'?target.length+2*p.minSize:2*p.minSize;
+    if(mode==='flank') {
+      if(target.start-domainStart<p.minSize || domainEnd-target.end<p.minSize)
+        fail('目标两侧至少各需 '+p.minSize+' bp 供引物结合。若要扩增到片段边界，请选择“精确扩增”；qPCR 可选择“区域内设计”。','mode');
+    }
+    if(available<theoreticalMin) fail('可用区域太短，无法容纳当前的引物长度和目标片段。','mode');
+    const hasMin=cfg.productMin!=null && String(cfg.productMin).trim()!=='';
+    const hasMax=cfg.productMax!=null && String(cfg.productMax).trim()!=='';
+    if(hasMin!==hasMax) fail('手动产物范围的最小值和最大值需要同时填写，或同时留空。','productMin');
+    let lo,hi;
+    if(mode==='exact') {
+      lo=hi=target.length;
+      if(hasMin) {
+        const m=number(cfg.productMin,'产物最短长度',1,500000,true), n=number(cfg.productMax,'产物最长长度',1,500000,true);
+        if(m>n || target.length<m || target.length>n) fail('指定片段长度不在手动产物范围内。请调整范围或留空。','productMin');
+      }
+      warnings.push('精确扩增固定两端边界，Primer3 只能调整引物结合区长度，可能找不到符合条件的引物；请核查实际返回参数与质量提示。');
+    } else if(hasMin) {
+      lo=number(cfg.productMin,'产物最短长度',1,500000,true);
+      hi=number(cfg.productMax,'产物最长长度',1,500000,true);
+      if(lo>hi) fail('产物最短长度不能大于最长长度。','productMin');
+      if(hi<theoreticalMin || lo>available) fail('产物范围与可用区域不相容：当前几何可行长度约为 '+theoreticalMin+'–'+available+' bp。','productMin');
+      if(lo<theoreticalMin || hi>available) warnings.push('手动范围保留为 '+lo+'–'+hi+' bp；其中超出几何可行范围的部分不会产生候选。');
+    } else {
+      hi=Math.min(available,mode==='flank'&&cfg.profile!=='qpcr'?Math.max(profile.product[1],target.length+600):profile.product[1]);
+      lo=Math.max(theoreticalMin,Math.min(profile.product[0],hi));
+      if(hi<lo) fail('该目标无法满足当前类型的自动产物长度。请调整扩增方式，或手动设置产物范围。','productMin');
+    }
+    if(cfg.profile==='qpcr' && (lo<70||hi>250)) warnings.push('当前范围偏离本程序 qPCR 的短扩增子预设。是否适合定量需结合扩增效率与实验验证。');
+    let leftTail='',rightTail='';
+    if(cfg.profile==='cloning') {
+      leftTail=normalize(cfg.leftTail,'正向引物 5′ 附加序列',true);
+      rightTail=normalize(cfg.rightTail,'反向引物 5′ 附加序列',true);
+      for(const tail of [leftTail,rightTail]) {
+        if(tail.includes('N')) fail('5′ 附加序列只能包含 A/C/G/T。');
+        if(tail.length+p.maxSize>60) fail('附加序列长度与引物最长结合区之和不能超过本程序的 60 nt 限制。');
+      }
+      if(leftTail||rightTail) warnings.push('5′ 附加序列需 Primer3 2.6.1 或以上版本。产物范围仅指模板对应部分；最终产物还包括两端附加序列。');
+    }
+    const nCount=(template.match(/N/g)||[]).length;
+    const known=template.length-nCount;
+    const gc=known?100*(template.match(/[GC]/g)||[]).length/known:0;
+    if(nCount) warnings.push('模板含 '+nCount+' 个 N；本程序设置引物不允许含 N。目标序列按字符精确匹配，不把 N 当通配符。');
+    if(gc>65 || gc<30) warnings.push('模板已知碱基的 GC 比例为 '+gc.toFixed(1)+'%，可能需要调整设计条件；不会自动放宽阈值。');
+    if(div>0 && dntp>=div) warnings.push('dNTP 总浓度不低于 Mg²⁺ 浓度，请核实反应条件。');
+    if(target.strand==='−') warnings.push('目标通过反向互补序列定位；输出坐标仍参照所输入模板，引物左右命名也以该模板为准。');
+    const path=String(cfg.thermoPath||'').trim();
+    if(/[\r\n\0]/.test(path) || /^['"]|['"]$/.test(path)) fail('热力学参数目录请填写不带引号的单行路径。','thermoPath');
+    const lines=[];
+    const add=(k,v)=>lines.push(k+'='+v);
+    add('SEQUENCE_ID',id); add('SEQUENCE_TEMPLATE',template);
+    add('PRIMER_FIRST_BASE_INDEX',0);
+    add('SEQUENCE_INCLUDED_REGION',(includedStart-1)+','+available);
+    if(mode==='flank') {
+      add('SEQUENCE_TARGET',(target.start-1)+','+target.length);
+      add('SEQUENCE_PRIMER_PAIR_OK_REGION_LIST',[domainStart-1,target.start-domainStart,target.end,domainEnd-target.end].join(','));
+    }
+    if(leftTail) add('SEQUENCE_OVERHANG_LEFT',leftTail);
+    if(rightTail) add('SEQUENCE_OVERHANG_RIGHT',rightTail);
+    add('PRIMER_TASK',mode==='exact'?'pick_cloning_primers':'generic');
+    add('PRIMER_PICK_LEFT_PRIMER',1); add('PRIMER_PICK_RIGHT_PRIMER',1); add('PRIMER_PICK_INTERNAL_OLIGO',0);
+    add('PRIMER_NUM_RETURN',count);
+    const fields={MIN_SIZE:'minSize',OPT_SIZE:'optSize',MAX_SIZE:'maxSize',MIN_TM:'minTm',OPT_TM:'optTm',MAX_TM:'maxTm',MIN_GC:'minGc',MAX_GC:'maxGc',PAIR_MAX_DIFF_TM:'diffTm',MAX_POLY_X:'polyX'};
+    for(const [tag,key] of Object.entries(fields)) add('PRIMER_'+tag,p[key]);
+    add('PRIMER_PRODUCT_SIZE_RANGE',lo+'-'+hi);
+    add('PRIMER_MAX_NS_ACCEPTED',0); add('PRIMER_GC_CLAMP',0); add('PRIMER_MAX_END_GC',3);
+    add('PRIMER_TM_FORMULA',1); add('PRIMER_SALT_CORRECTIONS',1);
+    add('PRIMER_SALT_MONOVALENT',mono); add('PRIMER_SALT_DIVALENT',div); add('PRIMER_DNTP_CONC',dntp); add('PRIMER_DNA_CONC',dnaConc);
+    add('PRIMER_THERMODYNAMIC_OLIGO_ALIGNMENT',1); add('PRIMER_THERMODYNAMIC_TEMPLATE_ALIGNMENT',0);
+    add('PRIMER_MAX_SELF_ANY_TH',47); add('PRIMER_MAX_SELF_END_TH',47); add('PRIMER_MAX_HAIRPIN_TH',47);
+    add('PRIMER_PAIR_MAX_COMPL_ANY_TH',47); add('PRIMER_PAIR_MAX_COMPL_END_TH',47);
+    add('PRIMER_PICK_ANYWAY',0); add('PRIMER_EXPLAIN_FLAG',1); add('PRIMER_LOWERCASE_MASKING',0); add('P3_FILE_FLAG',0);
+    if(path) add('PRIMER_THERMODYNAMIC_PARAMETERS_PATH',path.replace(/\\/g,'/').replace(/\/?$/,'/'));
+    lines.push('=');
+    return {text:lines.join('\n')+'\n',filename:id+'_primer3_input.txt',id,templateLength:template.length,target,mode,profile:profile.name,product:[lo,hi],gc,nCount,included:[includedStart,includedEnd],warnings,tailLength:leftTail.length+rightTail.length};
+  }
+  const api={PROFILES,MODES,InputError,normalize,revcomp,findMatches,resolveTarget,generate,version:'1.0.0'};
+  if(typeof module!=='undefined' && module.exports) module.exports=api;
+  root.Primer3Builder=api;
+})(typeof globalThis!=='undefined'?globalThis:this);
+</script>
+<script>(function () {
+  'use strict';
+  const B=window.Primer3Builder, $=id=>document.getElementById(id);
+  const paramKeys=['minSize','optSize','maxSize','minTm','optTm','maxTm','minGc','maxGc','diffTm','polyX'];
+  const configKeys=['id','profile','mode','template','start','end','targetSequence','matchKey','productMin','productMax','numReturn','mono','div','dntp','dnaConc','thermoPath','outerLeftStart','outerLeftEnd','outerRightStart','outerRightEnd','nestedGap','leftTail','rightTail'];
+  let targetMode='positions',result=null;
+  const profileHints={pcr:'常规成对引物设计。自动产物范围会结合目标长度与模板边界调整。',qpcr:'预设短扩增子 80–200 bp，适用于 SYBR qPCR 的初筛；默认在所选区域内寻找引物。',cloning:'默认固定指定片段两端，可选添加 5′ 酶切位点或同源臂。请自行确认阅读框与起止密码子。',outer:'先设计外引物，选定一对后，再以其实际结合位置限制内引物设计。',inner:'以已选外引物的结合区为边界，在其内侧设计第二轮引物。'};
+  const modeHints={flank:'目标完整位于两条引物之间；模板必须包含足够的左右侧翼。',within:'指定区域是搜索范围，程序不会要求扩增整个区域。适合在较长 cDNA 内设计 qPCR 引物。',exact:'模板对应产物的起点与终点固定为你指定的边界；引物从片段两端向内结合。'};
+  function config() { const c={targetMode,searchReverse:$('searchReverse').checked,params:{}}; for(const k of configKeys)c[k]=$(k).value;for(const k of paramKeys)c.params[k]=$(k).value;return c; }
+  function hideError(){ $('errorBox').hidden=true; }
+  function showError(error){ $('errorBox').textContent=error.message||String(error);$('errorBox').hidden=false;$('errorBox').focus(); }
+  function command() {
+    const id=result?result.id:'sequence_1';
+    const prefixes={bash:'./primer3_core',cmd:'primer3_core.exe',powershell:'.\\primer3_core.exe'};
+    $('command').textContent=prefixes[$('terminal').value]+' --strict_tags --output='+id+'_result.txt '+id+'_primer3_input.txt';
+  }
+  function invalidate(){
+    const had=!!result;result=null;$('downloadBtn').disabled=true;$('copyBtn').disabled=true;
+    $('resultPanel').hidden=true;$('emptyOutput').hidden=false;$('warningsCard').hidden=true;$('output').value='';
+    $('outputStatus').textContent=had?'待重新生成':'待生成';$('outputStatus').className='status';hideError();command();
+  }
+  function updateStats(){
+    if(!$('template').value.trim()){ $('seqStats').textContent='支持 A/C/G/T/N · 自动整理空白、行号和大小写';return; }
+    try { const s=B.normalize($('template').value); const n=(s.match(/N/g)||[]).length;const known=s.length-n;const gc=known?((s.match(/[GC]/g)||[]).length/known*100).toFixed(1):'—';$('seqStats').textContent=s.length.toLocaleString()+' bp · GC '+gc+'%'+(n?' · N '+n+' 个':''); }
+    catch(e){ $('seqStats').textContent='序列需要检查：'+e.message; }
+  }
+  function clearMatch(){ $('matchKey').replaceChildren();$('matchWrap').hidden=true;$('matchHint').textContent='按序列完全匹配；多处匹配时需选择位置。'; }
+  function setTargetMode(mode){targetMode=mode;$('positionFields').hidden=mode!=='positions';$('sequenceFields').hidden=mode!=='sequence';$('posTab').setAttribute('aria-pressed',String(mode==='positions'));$('seqTab').setAttribute('aria-pressed',String(mode==='sequence'));invalidate();}
+  function resetParams(){const p=B.PROFILES[$('profile').value];for(const k of paramKeys)$(k).value=p[k];}
+  function profileChanged(){resetParams();$('mode').value=B.PROFILES[$('profile').value].mode;$('productMin').value='';$('productMax').value='';$('nestedFields').hidden=$('profile').value!=='inner';$('tailFields').hidden=$('profile').value!=='cloning';$('profileHint').textContent=profileHints[$('profile').value];$('modeHint').textContent=modeHints[$('mode').value];invalidate();}
+  function renderMatches(matches,selected=''){
+    $('matchKey').replaceChildren();
+    if(matches.length>1){const empty=document.createElement('option');empty.value='';empty.textContent='请选择一个匹配位置';$('matchKey').append(empty);}
+    for(const m of matches){const o=document.createElement('option');o.value=m.key;o.textContent=m.start+'–'+m.end+' bp · '+(m.strand==='+'?'正向匹配':'反向互补匹配');$('matchKey').append(o);}
+    if(selected)$('matchKey').value=selected;
+    $('matchWrap').hidden=false;$('matchHint').textContent='找到 '+matches.length+' 处完全匹配。'+(matches.length>1?'请明确选择位置。':'已自动选中唯一匹配。');
+  }
+  function locate(){
+    hideError();
+    try {const template=B.normalize($('template').value),target=B.normalize($('targetSequence').value,'目标序列');if(target.includes('N'))throw new Error('目标序列含 N，请改用 bp 位置。');const matches=B.findMatches(template,target,$('searchReverse').checked);if(!matches.length)throw new Error('未找到完全匹配的目标序列。请检查模板、序列方向或改用 bp 位置。');renderMatches(matches);}
+    catch(e){clearMatch();showError(e);}
+  }
+  function render(r){
+    result=r;$('resultPanel').hidden=false;$('emptyOutput').hidden=true;$('outputStatus').textContent='已生成';$('outputStatus').className='status ready';
+    $('outLength').textContent=r.templateLength.toLocaleString()+' bp';$('outGc').textContent=r.gc.toFixed(1)+'%';$('outProduct').textContent=(r.product[0]===r.product[1]?r.product[0]:r.product.join('–'))+' bp';
+    $('targetBar').style.left=((r.target.start-1)/r.templateLength*100)+'%';$('targetBar').style.width=(r.target.length/r.templateLength*100)+'%';
+    $('outTarget').textContent='目标 '+r.target.start+'–'+r.target.end+' bp · '+B.MODES[r.mode]+(r.tailLength?' · 附加序列共 '+r.tailLength+' nt':'');
+    $('output').value=r.text;$('downloadBtn').disabled=false;$('copyBtn').disabled=false;$('copyStatus').textContent=r.filename;
+    $('warnings').replaceChildren();for(const w of r.warnings){const li=document.createElement('li');li.textContent=w;$('warnings').append(li);}$('warningsCard').hidden=!r.warnings.length;command();
+  }
+  $('form').addEventListener('submit',e=>{e.preventDefault();hideError();try{const r=B.generate(config());if(targetMode==='sequence')renderMatches(r.target.matches,r.target.key);render(r);if(window.innerWidth<761)$('outputStatus').scrollIntoView({behavior:'smooth',block:'center'});}catch(err){invalidate();if(err.matches?.length)renderMatches(err.matches);showError(err);}});
+  $('form').addEventListener('input',e=>{invalidate();if(['template','targetSequence','searchReverse'].includes(e.target.id))clearMatch();if(e.target.id==='template')updateStats();if(e.target.id==='mode')$('modeHint').textContent=modeHints[$('mode').value];});
+  $('form').addEventListener('change',e=>{if(e.target.id==='profile')profileChanged();if(e.target.id==='mode')$('modeHint').textContent=modeHints[$('mode').value];});
+  $('posTab').addEventListener('click',()=>setTargetMode('positions'));$('seqTab').addEventListener('click',()=>setTargetMode('sequence'));$('locateBtn').addEventListener('click',locate);
+  $('resetParamsBtn').addEventListener('click',()=>{resetParams();invalidate();});$('terminal').addEventListener('change',command);
+  $('importBtn').addEventListener('click',()=>$('fileInput').click());
+  $('fileInput').addEventListener('change',async e=>{
+    const file=e.target.files[0];if(!file)return;invalidate();
+    try {if(file.size>2*1024*1024)throw new Error('文件超过 2 MB，请缩小序列范围后导入。');const text=await file.text();B.normalize(text);$('template').value=text;clearMatch();updateStats();if(!$('id').value){const stem=file.name.replace(/\.[^.]+$/,'').replace(/[^A-Za-z0-9_.-]/g,'_').replace(/^[^A-Za-z0-9]+/,'').slice(0,80);$('id').value=stem||'sequence_1';}}
+    catch(err){showError(err);}finally{e.target.value='';}
+  });
+  $('downloadBtn').addEventListener('click',()=>{if(!result)return;const blob=new Blob([result.text],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=result.filename;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);$('copyStatus').textContent='已触发下载：'+result.filename;});
+  $('copyBtn').addEventListener('click',async()=>{if(!result)return;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(result.text);}else{ $('output').focus();$('output').select();if(!document.execCommand('copy'))throw new Error('copy');}$('copyStatus').textContent='指令已复制。';}catch{ $('output').focus();$('output').select();$('copyStatus').textContent='请按 Ctrl+C（Mac：⌘C）复制已选中的指令。';}});
+  $('exampleBtn').addEventListener('click',()=>{
+    // Synthetic example only. Never a biological reference or assay recommendation.
+    let seed=230924,sequence='';for(let i=0;i<1200;i++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;sequence+='ACGT'[seed>>>30];}
+    $('form').reset();$('profile').value='pcr';profileChanged();setTargetMode('positions');$('id').value='synthetic_demo';$('template').value='>synthetic_demo | artificial DNA for software demonstration only\n'+sequence.match(/.{1,80}/g).join('\n');$('start').value=401;$('end').value=650;clearMatch();updateStats();$('form').requestSubmit();
+  });
+  profileChanged();updateStats();
+})();
+</script>
+</body></html>
